@@ -28,15 +28,28 @@ const fetchTopStories = fetch('//api.nytimes.com/svc/topstories/v2/world.json?ap
 
 
 var App = React.createClass({
+  handleTopStoriesClick: function(event){
+    console.log(event)
+  },
+
+
   render: function(){
+    var sample = {
+      backgroundColor: "red",
+      height: "100%",
+      float: "right"
+    }
     console.log(this.props.posts.results);
+
     return (<div>
-      <SideMenu/>
-      {this.props.posts.results.map((post) => {
-        return (
-          <div>{post.title}</div>
-        )
-      })}
+          <SideMenu/>
+          <div style={sample} handleTopStoriesClick={this.handleTopStoriesClick}>
+            {this.props.posts.results.map((post) => {
+              return (
+                <div>{post.title}</div>
+              )
+            })}
+          </div>
       </div>
     )
   }

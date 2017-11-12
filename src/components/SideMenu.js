@@ -1,8 +1,6 @@
-var React = require('react');
-var createReactClass = require('create-react-class');
-// import { Dropdown } from 'semantic-ui-react';
-var Dropdown = require('semantic-ui-react');
-
+import { Dropdown } from 'semantic-ui-react';
+// import { createReactClass } from 'create-react-class';
+import React from 'react';
 
 const topStories = [ {key:'home', text: 'home' }, {key:'opinion', text: 'opinion' },
 {key: 'world', text: 'world'},
@@ -56,12 +54,57 @@ var SideMenu = React.createClass({
     <div style={sideBarStyle}>
       <div style={dropDownParent}>
         {/* <Dropdown placeholder='Top Stories' options={topStories} style={dropDownStyle}/>
-        <Dropdown placeholder='Top Stories'  options={mostPopularOptions} /> */}
+        <Dropdown placeholder='Top Stories'  options={mostPopularOptions} style={dropDownStyle} /> */}
+        <select>
+            {topStories.map((story) => {
+              return (
+                <option value={story.text} key={story.text} onClick={this.props.handleTopStoriesClick}>{story.text}</option>
+              )
+            })}
+        </select>
+        <br/>
+        <select>
+            {mostPopularOptions.map((story) => {
+              return (
+                <option value={story.text} key={story.text} onClick={this.props.handleMostPopClick}>{story.text}</option>
+              )
+            })}
+        </select>
       </div>
     </div>
     )
   }
 })
 
+// const sideBarStyle = {
+//   height: "100%",
+//   width: "30%",
+//   backgroundColor: "grey",
+//   textAlign: "center"
+// };
+//
+// const dropDownParent = {
+//    textAlign: "center",
+//    height: "auto",
+//    width: "75%",
+//    backgroundColor: "white"
+//  }
+//
+//  const dropDownStyle = {
+//     "marginBottom": "30px"
+//   }
+//
+//
+// function SideMenu() {
+//
+//   return(
+//     <div style={sideBarStyle}>
+//       <div style={dropDownParent}>
+//         <Dropdown placeholder='Top Stories' options={topStories} style={dropDownStyle}/>
+//         <Dropdown placeholder='Top Stories'  options={mostPopularOptions} style={dropDownStyle} />
+//       </div>
+//     </div>
+//   )
+// }
 
 export default SideMenu

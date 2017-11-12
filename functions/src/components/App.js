@@ -48,7 +48,13 @@ var App = _react2.default.createClass({
   displayName: 'App',
 
   render: function render() {
-    console.log(this.props);
+    var sample = {
+      backgroundColor: "red",
+      height: "100%",
+      float: "right"
+    };
+    console.log(this.props.posts.results);
+
     return _react2.default.createElement(
       'div',
       null,
@@ -62,7 +68,7 @@ exports.default = _reactTransmit2.default.createContainer(App, {
   fragments: {
     posts: function posts() {
       return fetchTopStories.then(function (resp) {
-        return resp.subsection;
+        return resp;
       });
     }
   }
