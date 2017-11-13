@@ -1,24 +1,10 @@
-// import React from 'react';
-//
-// function App(props){
-//   const facts = props.facts.map((fact, i) => {
-//     return <li key={i}>{fact.text}</li>
-//   })
-//   return (
-//     <ul>
-//       {facts}
-//     </ul>
-//   )
-// }
-//
-// export default App;
-
 import React from 'react';
+import Component from 'react';
 import fetch from 'isomorphic-fetch';
 import Transmit from 'react-transmit';
 import SideMenu from './SideMenu';
 
-const fetchTopStories = fetch('//api.nytimes.com/svc/topstories/v2/world.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193')
+const fetchTopStories = fetch(`//api.nytimes.com/svc/topstories/v2/world.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193`)
     .then(function(response) {
         if (response.status >= 400) {
             throw new Error("Bad response from server");
@@ -26,34 +12,91 @@ const fetchTopStories = fetch('//api.nytimes.com/svc/topstories/v2/world.json?ap
         return response.json();
     })
 
+export class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      topStories: null,
+      mostPopular: null,
+      mostPopularData: null
+    }
+    this.handleTopStoriesClick = this.handleTopStoriesClick.bind(this);
+    this.handleMostPopClick = this.handleMostPopClick.bind(this);
+  }
 
-var App = React.createClass({
-  handleTopStoriesClick: function(event){
-    console.log(event)
-  },
+  handleTopStoriesClick(event){
+    fetch(`//api.nytimes.com/svc/topstories/v2/${event.target.value}.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193`).then( response => {
+      if (response.status >= 400){
+        throw new Error('Unable to fetch stories')
+      }
+      return response.json()
+    }).then(({results}) => {
+      const topStories = results
+      this.setState({topStories})
+    })
+  }
 
+  handleMostPopClick(event){
+    fetch(`//api.nytimes.com/svc/mostpopular/v2/mostviewed/${event.target.value}/30.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193`).then( response => {
+      if (response.status >= 400){
+        throw new Error('Unable to fetch stories')
+      }
+      return response.json()
+    }).then(response => {
+      this.setState({
+        mostPopularData: response.results
+      })
+    })
+  }
 
-  render: function(){
+  componentDidMount(){
+    fetch(`//api.nytimes.com/svc/mostpopular/v2/mostviewed/arts/30.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193`).then( response => {
+      if (response.status >= 400){
+        throw new Error('Unable to fetch stories')
+      }
+      return response.json()
+    }).then(response => {
+      this.setState({
+        mostPopularData: response.results
+      })
+    })
+  }
+
+  render(){
     var sample = {
       backgroundColor: "red",
       height: "100%",
       float: "right"
     }
-    console.log(this.props.posts.results);
 
-    return (<div>
-          <SideMenu/>
-          <div style={sample} handleTopStoriesClick={this.handleTopStoriesClick}>
-            {this.props.posts.results.map((post) => {
-              return (
+    var sample1 = {
+      backgroundColor: "yellow",
+      float: "right"
+    }
+
+
+    return (
+      <div>
+        <SideMenu handleTopStoriesClick={this.handleTopStoriesClick} handleMostPopClick={this.handleMostPopClick}/>
+
+        <div style={sample}>
+            {this.state.topStories ? this.state.topStories.map((post) => {return (<div>{post.title}</div>)}) :
+            this.props.posts.results.map((post) => {
+              return(
                 <div>{post.title}</div>
               )
-            })}
-          </div>
+            })
+           }
+        </div>
+
+      <div style={sample1}>
+        {this.state.mostPopularData ? this.state.mostPopularData.map((post) => {return (<div>{post.title}</div>)}) : <h1>no</h1>}
+
       </div>
+  </div>
     )
   }
-});
+}
 
  export default Transmit.createContainer(App, {
   initialVariables: {},

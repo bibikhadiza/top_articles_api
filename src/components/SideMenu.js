@@ -1,5 +1,4 @@
 import { Dropdown } from 'semantic-ui-react';
-// import { createReactClass } from 'create-react-class';
 import React from 'react';
 
 const topStories = [ {key:'home', text: 'home' }, {key:'opinion', text: 'opinion' },
@@ -25,13 +24,28 @@ const topStories = [ {key:'home', text: 'home' }, {key:'opinion', text: 'opinion
 {key: 'magazine', text: 'magazine'}
 ]
 
-const mostPopularOptions = [ {key: 'mostemailed', text: "most emailed"},
-{key: 'mostshared', text: 'most shared'},
-{key: 'mostviewed', text: 'most viewed'}
+const mostPopularSection = [ {key: 'arts', text: "arts"},
+{key: 'automobiles', text: 'automobiles'},
+{key: 'blogs', text: 'blogs'},
+{key: 'books', text: 'books'},
+{key: 'business day', text: 'business day'},
+{key: 'education', text: 'education'},
+{key: 'food', text: 'food'},
+{key: 'health', text: 'health'},
+{key: 'job market', text: 'job market'},
+{key: 'magazine', text: 'magazine'},
+{key: 'membercenter', text: 'membercenter'},
+{key: 'movies', text: 'movies'},
+{key: 'multimedia', text: 'multimedia'},
+{key: 'open', text: 'open'},
+{key: 'opinion', text: 'opinion'},
+{key: 'science', text: 'science'},
+{key: 'technology', text: 'technology'}
 ]
 
 var SideMenu = React.createClass({
   render() {
+
     var sideBarStyle = {
       height: "100%",
       width: "30%",
@@ -53,20 +67,18 @@ var SideMenu = React.createClass({
   return (
     <div style={sideBarStyle}>
       <div style={dropDownParent}>
-        {/* <Dropdown placeholder='Top Stories' options={topStories} style={dropDownStyle}/>
-        <Dropdown placeholder='Top Stories'  options={mostPopularOptions} style={dropDownStyle} /> */}
-        <select>
+        <select onChange={this.props.handleTopStoriesClick}>
             {topStories.map((story) => {
               return (
-                <option value={story.text} key={story.text} onClick={this.props.handleTopStoriesClick}>{story.text}</option>
+                <option value={story.text} key={story.text}>{story.text}</option>
               )
             })}
         </select>
-        <br/>
-        <select>
-            {mostPopularOptions.map((story) => {
+        <br></br>
+        <select onChange={this.props.handleMostPopClick}>
+            {mostPopularSection.map((story) => {
               return (
-                <option value={story.text} key={story.text} onClick={this.props.handleMostPopClick}>{story.text}</option>
+                <option value={story.text} key={story.text}>{story.text}</option>
               )
             })}
         </select>
@@ -75,36 +87,5 @@ var SideMenu = React.createClass({
     )
   }
 })
-
-// const sideBarStyle = {
-//   height: "100%",
-//   width: "30%",
-//   backgroundColor: "grey",
-//   textAlign: "center"
-// };
-//
-// const dropDownParent = {
-//    textAlign: "center",
-//    height: "auto",
-//    width: "75%",
-//    backgroundColor: "white"
-//  }
-//
-//  const dropDownStyle = {
-//     "marginBottom": "30px"
-//   }
-//
-//
-// function SideMenu() {
-//
-//   return(
-//     <div style={sideBarStyle}>
-//       <div style={dropDownParent}>
-//         <Dropdown placeholder='Top Stories' options={topStories} style={dropDownStyle}/>
-//         <Dropdown placeholder='Top Stories'  options={mostPopularOptions} style={dropDownStyle} />
-//       </div>
-//     </div>
-//   )
-// }
 
 export default SideMenu

@@ -29729,14 +29729,8 @@ var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import getFacts from './components/Facts'
-
-// getFacts().then(facts => {
-//   ReactDOM.render(<App facts={facts}/>, document.getElementById('root'));
-//   registerServiceWorker();
-// })
-
 _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById("root"));
+(0, _registerServiceWorker2.default)();
 
 /***/ }),
 /* 460 */
@@ -41290,6 +41284,9 @@ module.exports = ReactDOMInvalidARIAHook;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.App = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(1);
 
@@ -41309,20 +41306,11 @@ var _SideMenu2 = _interopRequireDefault(_SideMenu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import React from 'react';
-//
-// function App(props){
-//   const facts = props.facts.map((fact, i) => {
-//     return <li key={i}>{fact.text}</li>
-//   })
-//   return (
-//     <ul>
-//       {facts}
-//     </ul>
-//   )
-// }
-//
-// export default App;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var fetchTopStories = (0, _isomorphicFetch2.default)('//api.nytimes.com/svc/topstories/v2/world.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193').then(function (response) {
   if (response.status >= 400) {
@@ -41331,24 +41319,129 @@ var fetchTopStories = (0, _isomorphicFetch2.default)('//api.nytimes.com/svc/tops
   return response.json();
 });
 
-var App = _react2.default.createClass({
-  displayName: 'App',
+var App = exports.App = function (_React$Component) {
+  _inherits(App, _React$Component);
 
-  render: function render() {
-    var sample = {
-      backgroundColor: "red",
-      height: "100%",
-      float: "right"
+  function App(props) {
+    _classCallCheck(this, App);
+
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.state = {
+      topStories: null,
+      mostPopular: null,
+      mostPopularData: null
     };
-    console.log(this.props.posts.results);
-
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(_SideMenu2.default, null)
-    );
+    _this.handleTopStoriesClick = _this.handleTopStoriesClick.bind(_this);
+    _this.handleMostPopClick = _this.handleMostPopClick.bind(_this);
+    return _this;
   }
-});
+
+  _createClass(App, [{
+    key: 'handleTopStoriesClick',
+    value: function handleTopStoriesClick(event) {
+      var _this2 = this;
+
+      (0, _isomorphicFetch2.default)('//api.nytimes.com/svc/topstories/v2/' + event.target.value + '.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193').then(function (response) {
+        if (response.status >= 400) {
+          throw new Error('Unable to fetch stories');
+        }
+        return response.json();
+      }).then(function (_ref) {
+        var results = _ref.results;
+
+        var topStories = results;
+        _this2.setState({ topStories: topStories });
+      });
+    }
+  }, {
+    key: 'handleMostPopClick',
+    value: function handleMostPopClick(event) {
+      var _this3 = this;
+
+      (0, _isomorphicFetch2.default)('//api.nytimes.com/svc/mostpopular/v2/mostviewed/' + event.target.value + '/30.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193').then(function (response) {
+        if (response.status >= 400) {
+          throw new Error('Unable to fetch stories');
+        }
+        return response.json();
+      }).then(function (response) {
+        _this3.setState({
+          mostPopularData: response.results
+        });
+      });
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this4 = this;
+
+      (0, _isomorphicFetch2.default)('//api.nytimes.com/svc/mostpopular/v2/mostviewed/arts/30.json?api-key=9ceb8c3021fc44f1b839f525b9f2b193').then(function (response) {
+        if (response.status >= 400) {
+          throw new Error('Unable to fetch stories');
+        }
+        return response.json();
+      }).then(function (response) {
+        _this4.setState({
+          mostPopularData: response.results
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var sample = {
+        backgroundColor: "red",
+        height: "100%",
+        float: "right"
+      };
+
+      var sample1 = {
+        backgroundColor: "yellow",
+        float: "right"
+      };
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_SideMenu2.default, { handleTopStoriesClick: this.handleTopStoriesClick, handleMostPopClick: this.handleMostPopClick }),
+        _react2.default.createElement(
+          'div',
+          { style: sample },
+          this.state.topStories ? this.state.topStories.map(function (post) {
+            return _react2.default.createElement(
+              'div',
+              null,
+              post.title
+            );
+          }) : this.props.posts.results.map(function (post) {
+            return _react2.default.createElement(
+              'div',
+              null,
+              post.title
+            );
+          })
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: sample1 },
+          this.state.mostPopularData ? this.state.mostPopularData.map(function (post) {
+            return _react2.default.createElement(
+              'div',
+              null,
+              post.title
+            );
+          }) : _react2.default.createElement(
+            'h1',
+            null,
+            'no'
+          )
+        )
+      );
+    }
+  }]);
+
+  return App;
+}(_react2.default.Component);
 
 exports.default = _reactTransmit2.default.createContainer(App, {
   initialVariables: {},
@@ -42603,72 +42696,64 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var topStories = [{ key: 'home', text: 'home' }, { key: 'opinion', text: 'opinion' }, { key: 'world', text: 'world' }, { key: 'national', text: 'national' }, { key: 'politics', text: 'politics' }, { key: 'upshot', text: 'upshot' }, { key: 'nyregion', text: 'nyregion' }, { key: 'business', text: 'business' }, { key: 'technology', text: 'technology' }, { key: 'science', text: 'science' }, { key: 'health', text: 'health' }, { key: 'sports', text: 'sports' }, { key: 'arts', text: 'arts' }, { key: 'books', text: 'books' }, { key: 'movies', text: 'movies' }, { key: 'theater', text: 'theater' }, { key: 'sundayreview', text: 'sundayreview' }, { key: 'fashion', text: 'fashion' }, { key: 'tmagazine', text: 'tmagazine' }, { key: 'food', text: 'food' }, { key: 'travel', text: 'travel' }, { key: 'magazine', text: 'magazine' }];
-// import { createReactClass } from 'create-react-class';
 
+var mostPopularSection = [{ key: 'arts', text: "arts" }, { key: 'automobiles', text: 'automobiles' }, { key: 'blogs', text: 'blogs' }, { key: 'books', text: 'books' }, { key: 'business day', text: 'business day' }, { key: 'education', text: 'education' }, { key: 'food', text: 'food' }, { key: 'health', text: 'health' }, { key: 'job market', text: 'job market' }, { key: 'magazine', text: 'magazine' }, { key: 'membercenter', text: 'membercenter' }, { key: 'movies', text: 'movies' }, { key: 'multimedia', text: 'multimedia' }, { key: 'open', text: 'open' }, { key: 'opinion', text: 'opinion' }, { key: 'science', text: 'science' }, { key: 'technology', text: 'technology' }];
 
-var mostPopularOptions = [{ key: 'mostemailed', text: "most emailed" }, { key: 'mostshared', text: 'most shared' }, { key: 'mostviewed', text: 'most viewed' }];
+var SideMenu = _react2.default.createClass({
+  displayName: 'SideMenu',
+  render: function render() {
 
-// var SideMenu = React.createClass({
-//   render() {
-//     var sideBarStyle = {
-//       height: "100%",
-//       width: "30%",
-//       backgroundColor: "grey",
-//       textAlign: "center"
-//      };
-//
-//      var dropDownParent = {
-//        textAlign: "center",
-//        height: "auto",
-//        width: "75%",
-//        backgroundColor: "white"
-//      }
-//
-//      var dropDownStyle = {
-//        "marginBottom": "30px"
-//      }
-//
-//   return (
-//     <div style={sideBarStyle}>
-//       <div style={dropDownParent}>
-//         <Dropdown placeholder='Top Stories' options={topStories} style={dropDownStyle}/>
-//         <Dropdown placeholder='Top Stories'  options={mostPopularOptions} style={dropDownStyle} />
-//       </div>
-//     </div>
-//     )
-//   }
-// })
+    var sideBarStyle = {
+      height: "100%",
+      width: "30%",
+      backgroundColor: "grey",
+      textAlign: "center"
+    };
 
-var sideBarStyle = {
-  height: "100%",
-  width: "30%",
-  backgroundColor: "grey",
-  textAlign: "center"
-};
+    var dropDownParent = {
+      textAlign: "center",
+      height: "auto",
+      width: "75%",
+      backgroundColor: "white"
+    };
 
-var dropDownParent = {
-  textAlign: "center",
-  height: "auto",
-  width: "75%",
-  backgroundColor: "white"
-};
+    var dropDownStyle = {
+      "marginBottom": "30px"
+    };
 
-var dropDownStyle = {
-  "marginBottom": "30px"
-};
-
-function SideMenu() {
-  return _react2.default.createElement(
-    'div',
-    { style: sideBarStyle },
-    _react2.default.createElement(
+    return _react2.default.createElement(
       'div',
-      { style: dropDownParent },
-      _react2.default.createElement(_semanticUiReact.Dropdown, { placeholder: 'Top Stories', options: topStories, style: dropDownStyle }),
-      _react2.default.createElement(_semanticUiReact.Dropdown, { placeholder: 'Top Stories', options: mostPopularOptions, style: dropDownStyle })
-    )
-  );
-}
+      { style: sideBarStyle },
+      _react2.default.createElement(
+        'div',
+        { style: dropDownParent },
+        _react2.default.createElement(
+          'select',
+          { onChange: this.props.handleTopStoriesClick },
+          topStories.map(function (story) {
+            return _react2.default.createElement(
+              'option',
+              { value: story.text, key: story.text },
+              story.text
+            );
+          })
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'select',
+          { onChange: this.props.handleMostPopClick },
+          mostPopularSection.map(function (story) {
+            return _react2.default.createElement(
+              'option',
+              { value: story.text, key: story.text },
+              story.text
+            );
+          })
+        )
+      )
+    );
+  }
+});
 
 exports.default = SideMenu;
 

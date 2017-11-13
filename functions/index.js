@@ -28,19 +28,6 @@ var _reactTransmit2 = _interopRequireDefault(_reactTransmit);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const index = fs.readFileSync(__dirname + './public/html', 'utf8')
-//
-// const app = express();
-//
-// app.get('**', (req, res) => {
-//   getFacts().then(facts => {
-//     const html = renderToString(<App facts={facts}/>);
-//     const finalHtml = index.replace('<-!--- ::APP:: --->', html)
-//     res.send(finalHtml);
-//   });
-// });
-
-// import getFacts from './src/Facts';
 function handleRender(req, res) {
   _reactTransmit2.default.renderToString(_App2.default).then(function (_ref) {
     var reactString = _ref.reactString,
@@ -62,5 +49,3 @@ app.use('/build', _express2.default.static(_path2.default.join(__dirname, 'build
 
 app.get('*', handleRender);
 app.listen(3000);
-
-// export let ssrapp = functions.https.onRequest(app);
